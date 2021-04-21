@@ -21,6 +21,7 @@
     <link href="{{ asset('css/servidav.css') }}" rel="stylesheet">
 </head>
 <body class="bg-blue-servidav flex-shrink-0">   
+    
     <main class="py-4">
         @yield('content')
     </main>
