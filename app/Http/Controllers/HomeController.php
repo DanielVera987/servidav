@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Service;
+use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
+use App\Models\ServicesSubcategories;
 
 class HomeController extends Controller
 {
@@ -26,14 +27,26 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->category) {
-            $services = Service::with('user', 'category', 'services_subcategories')->ByCategory($request->category)->paginate(5)->withQueryString();
-        }else{
-            $services = Service::with('user', 'category', 'services_subcategories')->paginate(5);
+        $subcategories = Subcategory::all();
+     
+        $services = $this->isFilter($request);
+        $categories = Category::all();
+     
+        return view('home', compact('services', 'categories', 'subcategories'));
+    }
+
+    /**
+     * Filter for search
+     *
+     * @param Request $request
+     * @return void
+     */
+    protected function isFilter(Request $request)
+    {
+        if(isset($request->subcategory) && count($request->subcategory) > 0) {
+            return ServicesSubcategories::with('service', 'subcategory')->get();
         }
 
-        $categories = Category::all();
-        $subCategories = Subcategory::all();
-        return view('home', compact('services', 'categories', 'subCategories'));
+        return Service::with('user', 'category')->paginate(5);
     }
 }

@@ -37,6 +37,13 @@ class Service extends Model
         return $query->where('category_id', $type);
     }
 
+    /**
+     * Scope by Subcategory
+     *
+     * @param [type] $query
+     * @param [type] $type
+     * @return void
+     */
     public function scopeBySubcategory($query, $type){
         return $query->where('category_id', $type);
     }

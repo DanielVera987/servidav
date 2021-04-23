@@ -9,12 +9,12 @@ class ServicesSubcategories extends Model
 {
     use HasFactory;
 
-    public function services()
+    public function service()
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function subcategories()
+    public function subcategory()
     {
         return $this->belongsTo(Subcategory::class);
     }

@@ -14,27 +14,20 @@
 
                     <form action="{{ route('home') }}" method="GET">
                         <div class="row m-1">
-                            <div class="col-5 col-md-5">
+                            <div class="col-9 col-md-9">
                                 <div class="form-group row">
-                                    <select class="form-control col-md-8 w-100" name="category" id="">
-                                        <option value="" selected disabled>Categorias</option>
-                                        @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                        @endforeach
+                                    <select class="form-control selectpicker" 
+                                            title="¿Qué estas buscando?"
+                                            multiple="multiple"
+                                            placeholder="¿Qué estas buscando?"
+                                            name="subcategory[]">
+                                            @foreach ($subcategories as $subcategory)
+                                                <option data-tokens="Espresso">{{ $subcategory->name }}</option>
+                                            @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5">
-                                <div class="form-group row">
-                                    <select class="form-control col-md-8 w-100" name="subcategory" id="">
-                                        <option value="" selected disable>SubCategorias</option>
-                                        @foreach ($subCategories as $subcategory)
-                                            <option value="{{ $subcategory->id }}">{{ $subcategory->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-2 col-md-2">
+                            <div class="col-3 col-md-3">
                                 <div class="form-group">
                                     <input type="submit" value="Buscar" class="btn btn-primary">
                                 </div>
@@ -52,18 +45,18 @@
                                 <div class="col-9 col-md-9">
                                     <table class="w-100">
                                         <tr>
-                                            <td>
+                                            <td style="width: 50%;">
                                                 <strong>Nombre:</strong> {{ $service->user->name }} <br>
                                             </td>
-                                            <td>
+                                            <td style="width: 50%;">
                                                 <strong>Categoria:</strong> {{ $service->category->name }} <br>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>
+                                            <td style="width: 50%;">
                                                 <strong>Servicios:</strong>  {{ $service->services_categories }} &nbsp;&nbsp; <br>
                                             </td>
-                                            <td>
+                                            <td style="width: 50%;">
                                                 <strong>Calif.</strong> 🌕🌕🌕🌕🌚
                                             </td>
                                         </tr>
@@ -76,7 +69,6 @@
                     <div class="d-flex justify-content-center">
                         {{ $services->links() }}
                     </div>
-
 
                 </div>
             </div>
@@ -101,4 +93,36 @@
         </div>
     </footer>  
 </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script>
+
+        jQuery(document).ready(function($){
+            $(document).ready(function() {
+                $('.selectpicker').select2();
+            });
+        });
+
+        const $selectCategory = document.getElementById("category");
+        const $selectSubcategory = document.getElementById("subcategory");
+
+        let request = new XMLHttpRequest();
+
+        request.onload = function(){
+            if(request.status === 200) {
+                console.log(request);
+            }else{
+                console.log("error");
+            }
+        };
+
+        request.open("GET", "https://rickandmortyapi.com/api", true);
+
+        $selectCategory.addEventListener("change", () => {
+            console.log("change");
+            request.send();
+        });
+    </script>
 @endsection
